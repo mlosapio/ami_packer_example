@@ -1,0 +1,30 @@
+{
+  "variables": {
+    "aws_access_key": "",
+    "aws_secret_key": "",
+    "vpc_id": "",
+    "subnet_id": ""
+  },
+  "builders": [{
+   "type" : "amazon-ebs",
+   "region" : "us-east-1",
+   "vpc_id" : "{{user `vpc_id`}}",
+   "subnet_id" : "{{user `subnet_id`}}",
+   "ssh_username" : "centos",
+   "instance_type" : "t2.medium",
+   "source_ami" : "ami-6d1c2007",
+   "enhanced_networking" : true,
+   "encrypt_boot": true,
+   "ssh_pty" : true,
+   "ami_name": "packer-test-{{timestamp}}"
+   }],
+  "provisioners": [
+    {
+      "type": "shell",
+      "scripts": [
+          "./scripts/update-system.sh",
+          "./scripts/remove-rootkey.sh"
+      ]
+    }
+  ]
+}
